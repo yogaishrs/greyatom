@@ -7,6 +7,7 @@ podtmpl="podcreate"
 podexpose="podexpose"
 gcmd=`which gcloud`
 kbcmd=`which kubectl`
+jq=`which jq`
 
 if [ $# -lt 3 ]; then
 	echo -e "\t\t ./launch_jupyter.sh --cpu=[1,2,[10m,20m...] --memory=[20mi,30mi.....] --client=[clientname]
@@ -19,6 +20,7 @@ fi
 [ ! -f "$podexpose" ] && echo -e "Expose template file $podexpose doesnt exist" && exit
 [ ! -x "$gcmd" ] && echo -e "gcloud binary missing" && exit 
 [ ! -x "$kbcmd" ] && echo -e " kubectl binary doesnt exist" && exit
+[ ! -x "$jq" ] && echo -e " jq binary doesnt exist" && exit
 
 
 mypj=`gcloud config list --format='text(core.project)'|awk -F: '{ print $2 }'|sed "s/^ //g"`
@@ -50,7 +52,7 @@ sed -e "s/jy-CLIENT/$srvname/g" $podexpose > $clexpose
 $kbcmd create -f ./$clexpose ) &>>$podlog
 tail -n1 "$podlog"
 echo -e "Sleeping for 60 seconds to get external url ready" && sleep 60
-( echo -e "`date +"%d-%m-%y %H:%M:%S "` $srvname http://`$kbcmd get service $srvname  -o json |jq -r '.status[].ingress[].ip'`" ) &>>$podlog
+( echo -e "`date +"%d-%m-%y %H:%M:%S "` $srvname http://`$kbcmd get service $srvname  -o json |$jq -r '.status[].ingress[].ip'`" ) &>>$podlog
 tail -n1 "$podlog"
 fi
 
