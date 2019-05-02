@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #This programme configures your google cloud account and pushes your jupyter/minimal-notebook images to google container registry
-#This programme needs sudo privileges for somme command pls make sure the user is in sudo group
+#This programme needs sudo privileges for some command pls make sure the user is in sudo group
 #./pushjupyter.sh
 #Author:Yogesh S.
 
