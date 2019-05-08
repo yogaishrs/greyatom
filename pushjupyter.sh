@@ -12,6 +12,7 @@ echo "Pls give Google cloud account name:"
 read gact
 gcloud auth login "$gact"
 sudo snap install kubectl --classic
+sudo snap install jq
 sudo apt install docker.io
 mypj=`gcloud config list --format='text(core.project)'|awk -F: '{ print $2 }'|sed "s/^ //g"`
 sudo docker pull jupyter/minimal-notebook
